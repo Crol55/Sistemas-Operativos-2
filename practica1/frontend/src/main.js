@@ -21,21 +21,110 @@ let nameElement = document.getElementById("name");
 nameElement.focus();
 let resultElement = document.getElementById("result");
 */
-window.getRam = ()=>{
-    GetCPUUsage().then(res =>{
-        window.alert(Math.round(res));
-    })
+
+var INTERVALO_CPU;
+var INTERVALO_DISCO;
+
+window.getCPU = ()=>{
+
+  if (document.getElementById("CPU") != null){
+    console.log("ya hay una instancia del grafico", document.getElementById("CPU"));
+    return;
+  }
+
+  clearInterval(INTERVALO_DISCO);
+
+  document.querySelector("#graficas").innerHTML = `
+    <div style="width: 800px; padding-left: 0; padding-right: 0; margin-left: auto; margin-right: auto; display: block;">
+      <canvas id="CPU"></canvas>
+    </div>
+  `;
+
+  const segundos = Array.from(Array(60).keys());
+  var grafico = new Chart(
+  document.getElementById('CPU'),
+    {
+    type: 'line',
+    data: {
+      labels: segundos,
+      datasets: [
+        {
+          label: '% utilizacion del CPU',
+          data: []
+        }
+      ]
+    }, 
+    options:{
+      scales:{
+        y:{
+          suggestedMin: 0, 
+          suggestedMax: 100
+        }
+      }
+    }
+    }
+  );
+
+  INTERVALO_CPU = setInterval(manejador, 1000, grafico);
 }
 
 window.getDisk = function (){
-    GetDiskUsage().then(res =>{
-        window.alert(res);
-    })
+
+  clearInterval(INTERVALO_CPU);
+
+    document.querySelector("#graficas").innerHTML = `
+    <div style="width: 400px; padding-left: 0; padding-right: 0; margin-left: auto; margin-right: auto; display: block;">
+      <canvas id="DISCO"></canvas>
+    </div>
+  `;
+
+  var graficoDisco = new Chart(document.getElementById("DISCO"), {
+
+      type: "pie", 
+      data:{
+        labels:['rojo', 'verde'],
+        datasets:[
+          {
+            label:"% de uso del disco duro",
+            data:[50,50],
+            backgroundColor:[
+              'rgb(255,99,132)', 
+              'rgb(255,205,86)'
+            ],
+            hoverOffset: 4
+          }
+        ]
+      }
+    }
+  );
+
+  INTERVALO_DISCO = setInterval(manejadorConsultaDisco, 1000, graficoDisco);
 }
 
-window.test = function(){
-    window.alert("si deberia funcionar");
+function manejador(grafico){
+  
+  GetCPUUsage().then(dato =>{
+    console.log(dato);
+    if(dato > 0){
+      
+      grafico.data.datasets[0].data.unshift(Math.round(dato));
+      grafico.update("none");
+    }
+  })
+
 }
+
+function manejadorConsultaDisco(grafico){
+  
+  GetDiskUsage().then(dato =>{
+    console.log(dato);
+    
+    //grafico.data.datasets[0].data.unshift(Math.round(dato));
+    //grafico.update("none");   
+  })
+
+}
+
 // Setup the greet function
 window.greet = function () {
     // Get name
@@ -58,45 +147,4 @@ window.greet = function () {
         console.error(err);
     }
 };
-
-const segundos = Array.from(Array(60).keys());
-
-    const data = [
-      { year: 2010, count: 40 },
-      { year: 2011, count: 20 },
-      { year: 2012, count: 15 },
-      { year: 2013, count: 25 },
-      { year: 2014, count: 22 },
-      { year: 2015, count: 30 },
-      { year: 2016, count: 28 },
-    ];
     
-    var grafico = new Chart(
-      document.getElementById('acquisitions'),
-      {
-        type: 'line',
-        data: {
-          labels: segundos,
-          datasets: [
-            {
-              label: 'Acquisitions by year',
-              data: data.map(row => row.count)
-            }
-          ]
-        }
-      }
-    );
-
-    setTimeout(manejador, 3000);
-
-    function manejador(){
-        
-        grafico.data.labels.push(2017);
-        grafico.data.datasets[0].data.push(70);
-        grafico.update();
-    }
-
-console.log( segundos);
-
-    
-
