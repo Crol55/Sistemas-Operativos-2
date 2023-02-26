@@ -26,7 +26,7 @@ var INTERVALO_CPU;
 var INTERVALO_DISCO;
 
 window.getCPU = ()=>{
-
+ 
   if (document.getElementById("CPU") != null){
     console.log("ya hay una instancia del grafico", document.getElementById("CPU"));
     return;
@@ -70,6 +70,10 @@ window.getCPU = ()=>{
 
 window.getDisk = function (){
 
+  if (document.getElementById("DISCO") != null){
+    console.log("ya hay una instancia del grafico");
+    return;
+  }
   clearInterval(INTERVALO_CPU);
 
     document.querySelector("#graficas").innerHTML = `
@@ -79,17 +83,16 @@ window.getDisk = function (){
   `;
 
   var graficoDisco = new Chart(document.getElementById("DISCO"), {
-
       type: "pie", 
       data:{
-        labels:['rojo', 'verde'],
+        labels:['Libre', 'Usado'],
         datasets:[
           {
             label:"% de uso del disco duro",
-            data:[50,50],
+            data:[0,0],
             backgroundColor:[
-              'rgb(255,99,132)', 
-              'rgb(255,205,86)'
+              'rgb(153,255,153)',
+              'rgb(255,99,132)'
             ],
             hoverOffset: 4
           }
@@ -104,10 +107,11 @@ window.getDisk = function (){
 function manejador(grafico){
   
   GetCPUUsage().then(dato =>{
-    console.log(dato);
-    if(dato > 0){
+    let valorCPU = Math.round(dato);
+    console.log(valorCPU);
+    if(valorCPU > 0){
       
-      grafico.data.datasets[0].data.unshift(Math.round(dato));
+      grafico.data.datasets[0].data.unshift(Math.round(valorCPU));
       grafico.update("none");
     }
   })
@@ -118,9 +122,8 @@ function manejadorConsultaDisco(grafico){
   
   GetDiskUsage().then(dato =>{
     console.log(dato);
-    
-    //grafico.data.datasets[0].data.unshift(Math.round(dato));
-    //grafico.update("none");   
+    grafico.data.datasets[0].data = [(100-dato), dato];
+    grafico.update("none"); 
   })
 
 }
