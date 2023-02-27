@@ -1,7 +1,8 @@
 import './style.css';
 import './app.css';
+import Chart from 'chart.js/auto';
 
-import logo from './assets/images/logo-universal.png';
+// <script src="./node_modules/chart.js/dist/chart.umd.js" type="module"></script>
 import {GetDiskUsage,GetCPUUsage, Greet} from '../wailsjs/go/main/App';
 
 /*<div id="app"></div>
@@ -28,7 +29,7 @@ var INTERVALO_DISCO;
 window.getCPU = ()=>{
  
   if (document.getElementById("CPU") != null){
-    console.log("ya hay una instancia del grafico", document.getElementById("CPU"));
+    window.alert(document.getElementById("CPU"));
     return;
   }
 
@@ -39,7 +40,7 @@ window.getCPU = ()=>{
       <canvas id="CPU"></canvas>
     </div>
   `;
-
+  
   const segundos = Array.from(Array(60).keys());
   var grafico = new Chart(
   document.getElementById('CPU'),
