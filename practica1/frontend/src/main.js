@@ -4,6 +4,7 @@ import Chart from 'chart.js/auto';
 
 // <script src="./node_modules/chart.js/dist/chart.umd.js" type="module"></script>
 import {GetDiskUsage,GetCPUUsage, Greet} from '../wailsjs/go/main/App';
+import { LogInfo } from '../wailsjs/runtime/runtime';
 
 /*<div id="app"></div>
     background-color: rgba(27, 38, 54, 1);
@@ -29,7 +30,7 @@ var INTERVALO_DISCO;
 window.getCPU = ()=>{
  
   if (document.getElementById("CPU") != null){
-    window.alert(document.getElementById("CPU"));
+    LogInfo("Ya existe una instancia de CPU, no puede ejecutarse mas de 1 vez");
     return;
   }
 
@@ -72,7 +73,7 @@ window.getCPU = ()=>{
 window.getDisk = function (){
 
   if (document.getElementById("DISCO") != null){
-    console.log("ya hay una instancia del grafico");
+    LogInfo("ya hay una instancia del grafico");
     return;
   }
   clearInterval(INTERVALO_CPU);
