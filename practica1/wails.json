@@ -1,6 +1,6 @@
 {
   "$schema": "https://wails.io/schemas/config.v2.json",
-  "name": "practica1",
+  "name": "proyecto1",
   "outputfilename": "Proyecto1",
   "frontend:install": "npm install",
   "frontend:build": "npm run build",
@@ -8,6 +8,6 @@
   "frontend:dev:serverUrl": "auto",
   "author": {
     "name": "Carlos Orantes",
-    "email": ""
+    "email": "carlosorantes@gmail.com"
   }
 }
