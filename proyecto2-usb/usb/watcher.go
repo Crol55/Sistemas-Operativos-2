@@ -22,7 +22,7 @@ func DirWatcher() {
 	var previousEventMask uint32 = 0
 
 	for {
-		//fmt.Println("vuelve a subir")
+
 		select {
 
 		case event := <-watcher.C:
@@ -49,7 +49,7 @@ func DirWatcher() {
 
 					if previousEventMask == gonotify.IN_MODIFY {
 						previousEventMask = 0
-						fmt.Printf("Archivo creado o copiado hacia dispositvo usb: %s\n", event.Name)
+						//fmt.Printf("Archivo creado o copiado hacia dispositvo usb: %s\n", event.Name)
 						writeIntoLog(fmt.Sprintf("Archivo '%s' copiado HACIA dispositivo externo", event.Name))
 					}
 
@@ -57,7 +57,7 @@ func DirWatcher() {
 
 					if previousEventMask == gonotify.IN_OPEN {
 						previousEventMask = 0
-						fmt.Printf("Archivo copiado desde el dispositvo usb: %s\n", event.Name)
+						//fmt.Printf("Archivo copiado desde el dispositvo usb: %s\n", event.Name)
 						writeIntoLog(fmt.Sprintf("Archivo '%s' copiado DESDE dispositivo externo a disco duro", event.Name))
 					}
 
@@ -99,7 +99,7 @@ func writeIntoLog(info string) {
 
 	tiempo := time.Now()
 
-	logFile, err := os.OpenFile("log", (os.O_APPEND | os.O_CREATE | os.O_WRONLY), 0644)
+	logFile, err := os.OpenFile("/var/p2so2/log", (os.O_APPEND | os.O_CREATE | os.O_WRONLY), 0644)
 
 	checkErr(err)
 	defer logFile.Close()

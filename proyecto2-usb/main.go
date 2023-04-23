@@ -8,8 +8,9 @@ import (
 
 func main() {
 
-	var USUARIO string = "a"
-	var PASSWORD string = "a"
+	var isUsbMonitorActive = false
+	var USUARIO string = "so2"
+	var PASSWORD string = "123"
 
 	var answer string
 	var inputPwd string
@@ -26,9 +27,14 @@ func main() {
 
 		fmt.Println("Bienvenido al manejador de USB")
 
-		if usb.IsPortActive() {
+		if !isUsbMonitorActive {
+			fmt.Println("Activando monitor de puertos")
+			go usb.DirWatcher()       // monitoreamos los puertos
+			isUsbMonitorActive = true // solo 1 monitor debe existir a la vez
+		}
+	puertos:
 
-			go usb.DirWatcher() // monitoreamos los puertos
+		if usb.IsPortActive() {
 
 			fmt.Print("Los puertos estan activos, desea (deshabilitar) los puertos USB (Y|N):")
 			fmt.Scan(&answer)
@@ -49,6 +55,8 @@ func main() {
 				usb.UnlockAllUsbPorts()
 			}
 		}
+
+		goto puertos
 
 	}
 
