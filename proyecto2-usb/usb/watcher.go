@@ -99,7 +99,10 @@ func writeIntoLog(info string) {
 
 	tiempo := time.Now()
 
-	logFile, err := os.OpenFile("/var/p2so2/log", (os.O_APPEND | os.O_CREATE | os.O_WRONLY), 0644)
+	err := os.MkdirAll("/var/p2so2", 0655)
+	checkErr(err)
+
+	logFile, err := os.OpenFile("/var/p2so2/log.txt", (os.O_APPEND | os.O_CREATE | os.O_WRONLY), 0646)
 
 	checkErr(err)
 	defer logFile.Close()
