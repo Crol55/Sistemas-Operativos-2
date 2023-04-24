@@ -8,7 +8,6 @@ import (
 
 func main() {
 
-	var isUsbMonitorActive = false
 	var USUARIO string = "so2"
 	var PASSWORD string = "123"
 
@@ -26,12 +25,10 @@ func main() {
 		}
 
 		fmt.Println("Bienvenido al manejador de USB")
+		fmt.Println("Activando el monitor de dispositivos extraibles (log-> /var/p2so2/log.txt)")
 
-		if !isUsbMonitorActive {
-			fmt.Println("Activando monitor de puertos")
-			go usb.DirWatcher()       // monitoreamos los puertos
-			isUsbMonitorActive = true // solo 1 monitor debe existir a la vez
-		}
+		go usb.DirWatcher() // monitoreamos los puertos
+
 	puertos:
 
 		if usb.IsPortActive() {
